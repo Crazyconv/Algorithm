@@ -2,6 +2,8 @@
 # RANDOM(a, b) returns an integer in [a, b] randomly
 # a and b are positive integer
 
+# probalitistic analysis: average running time is O(log(b-a))
+
 import random
 
 def random_0_1():
