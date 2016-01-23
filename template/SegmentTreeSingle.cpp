@@ -1,4 +1,4 @@
-//区间最大值
+//区间最值 单点替换
 #include <cstdio>
 #include <algorithm>
 using namespace std;
@@ -6,25 +6,15 @@ using namespace std;
 #define lson l , m , rt << 1    
 #define rson m + 1 , r , rt << 1 | 1   
 #define root 1 , N , 1    
-const int maxn = 1000+10;    
+const int maxn = 200000+10;    
 bool reduce[maxn<<2];    
-int MIN[maxn<<2];    
+int MAX[maxn<<2];    
 void PushUp(int rt) {    
-    MIN[rt] = min(MIN[rt<<1], MIN[rt<<1|1]);    
-}    
-void PushDown(int rt,int m) {    
-    if (reduce[rt]) {    
-        reduce[rt<<1] = true;
-        reduce[rt<<1|1] = true;  
-        MIN[rt<<1] --;   
-        MIN[rt<<1|1] --;   
-        reduce[rt] = false;    
-    }    
-}    
-void build(int l,int r,int rt) {    
-    reduce[rt] = false;    
+    MAX[rt] = max(MAX[rt<<1], MAX[rt<<1|1]);    
+}      
+void build(int l, int r, int rt) {        
     if (l == r) {    
-        scanf("%lld",&MIN[rt]);    
+        scanf("%d",&MAX[rt]);    
         return ;    
     }    
     int m = (l + r) >> 1;    
@@ -32,27 +22,24 @@ void build(int l,int r,int rt) {
     build(rson);    
     PushUp(rt);    
 }    
-void update(int L,int R,int c,int l,int r,int rt) {    
-    if (L <= l && r <= R) {    
-        add[rt] += c;    
-        MIN[rt] += (LL)c * (r - l + 1);    
+void update(int p, int c, int l, int r, int rt) {    
+    if (l == r) {      
+        MAX[rt] = c;    
         return ;    
-    }    
-    PushDown(rt , r - l + 1);    
+    }       
     int m = (l + r) >> 1;    
-    if (L <= m) update(L , R , c , lson);    
-    if (m < R) update(L , R , c , rson);    
+    if (p <= m) update(p, c, lson);    
+    else update(p, c, rson);    
     PushUp(rt);    
 }    
-LL query(int L,int R,int l,int r,int rt) {    
+int query(int L, int R, int l, int r, int rt) {    
     if (L <= l && r <= R) {    
-        return MIN[rt];    
-    }    
-    PushDown(rt , r - l + 1);    
+        return MAX[rt];    
+    }      
     int m = (l + r) >> 1;    
-    LL ret = 0;    
-    if (L <= m) ret += query(L , R , lson);    
-    if (m < R) ret += query(L , R , rson);    
+    int ret = 0;    
+    if (L <= m) ret = max(ret, query(L , R , lson));    
+    if (m < R) ret = max(ret, query(L , R , rson));    
     return ret;    
 }    
 

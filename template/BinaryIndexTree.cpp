@@ -34,6 +34,20 @@ void update(int index, int value){
     }
 }
 
+// if we do not store the original array
+void single(int index){
+    int sum = tree[index];
+    if(index > 0){
+        int z = index - low_bit(index);
+        index --;
+        whlie(index > z){
+            sum -= tree[index];
+            index -= low_bit(index);
+        }
+    }
+    return sum;
+}
+
 int main(){
     int T, a, b;
     char op[10];
